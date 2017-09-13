@@ -1,0 +1,110 @@
+<apex:page controller="AccountSortSearchandFilterController" showHeader="false">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script type="text/javascript" language="javascript" src="{!URLFOR($Resource.JqueryDataTablePackage, 'DataTables-1.10.5/media/js/jquery.js')}"></script>
+    <script type="text/javascript" language="javascript" src="{!URLFOR($Resource.JqueryDataTablePackage, 'DataTables-1.10.5/media/js/jquery.dataTables.js')}"></script>
+    
+    <apex:stylesheet value="{!URLFOR($Resource.JqueryDataTablePackage, 'DataTables-1.10.5/media/css/jquery.dataTables.css')}"/>
+        <apex:stylesheet value="https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css"/>
+            <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js"> </script> 
+    
+   
+                
+                <script type="text/javascript">
+                var $j = jQuery.noConflict();
+                var datatable1;
+                var datatable2;
+                $(document).ready(function()
+                                  {
+                                      //setHeight();
+                                      loadTable();
+                                      $j('[id$="pbt_filter"]').css("display", "none");
+                                      window.location.hash="no-back-button";
+                                      window.location.hash="Again-No-back-button";
+                                      window.onhashchange=function()
+                                      {
+                                          window.location.hash="no-back-button";
+                                      }    
+                                  });
+                
+                function setHeight()
+                {
+                    var rowCount = $j('[id$="pbt"] tr').length;
+                    
+                    if(rowCount < 6) 
+                    {
+                        $j('[id$="pbt"]').find('tbody').append($j('<tr>').append($j('<td>').attr('height', '105px').css('border', '0px')));
+                    }
+                    
+                    //setTimeout(setHeight, 0);
+                }
+                
+                function loadTable(){
+                    
+                    
+                    if($j('[id$="pbt"]')){
+                        
+                        $j('[id$="pbt"]').dataTable({
+                            
+                            
+                            sPaginationType: "full_numbers",
+                            
+                            "lengthMenu": [[10, 20, 50 , 100 , -1], [10, 20, 50 , 100 , "All"]]   
+                            
+                        });
+                        
+                        setHeight();
+                        $j('[id$="pbt_filter"]').css("display", "none");
+                        return false;    
+                        
+                    }
+                    
+                }   
+                
+                </script>
+                
+                <apex:form >
+                    <apex:pageMessages id="msgs" />      
+                    <apex:outputPanel id="accountPanel"  layout="block" >
+                        <apex:pageBlock title="Accounts">
+                            
+                            <div style="padding-bottom:15px;"><apex:inputText label="Search" value="{!searchText}" id="text" />
+                                
+                                <apex:commandButton styleClass="input_btn" value="Search" action="{!search}" oncomplete="loadTable();" reRender="msgs,pbt,accountPanel" id="btn"/>
+                                <apex:commandButton styleClass="input_btn" value="Reset" oncomplete="loadTable();" action="{!resetAccounts}" reRender="text,accountPanel,msgs,pbt"/></div> 
+                            <apex:pageBlockTable value="{!accounts}" var="account" id="pbt">         
+                                
+                                
+                                <apex:column >
+                                    <apex:facet name="header">
+                                        <apex:commandlink value="Account Name" action="{!toggleSort}" rerender="results">
+                                            <apex:param name="sortField" value="Name" assignto="{!sortField}"/>
+                                        </apex:commandlink>
+                                    </apex:facet>
+                                    <apex:outputfield value="{!Account.Name}"/>
+                                </apex:column>
+                                
+                                <apex:column >
+                                    <apex:facet name="header">
+                                        <apex:commandlink value="Account Phone" action="{!toggleSort}" rerender="results">
+                                            <apex:param name="sortField" value="phone" assignto="{!sortField}"/>
+                                        </apex:commandlink>
+                                    </apex:facet>
+                                    <apex:outputfield value="{!Account.Phone}"/>
+                                </apex:column>
+                                
+                                <apex:column >
+                                    <apex:facet name="header">
+                                        <apex:commandlink value="Account Type" action="{!toggleSort}" rerender="results">
+                                            <apex:param name="sortField" value="Type" assignto="{!sortField}"/>
+                                        </apex:commandlink>
+                                    </apex:facet>
+                                    <apex:outputfield value="{!Account.Type}"/>
+                                </apex:column>
+                                
+                            </apex:pageBlockTable>
+                        </apex:pageBlock>
+                    </apex:outputPanel>
+                    
+                </apex:form>
+        
+</apex:page>

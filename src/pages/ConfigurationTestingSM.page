@@ -1,0 +1,76 @@
+<apex:page controller="SMController"  showHeader="false" standardStylesheets="false"  doctype="html5.0">
+    
+    
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" /> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    
+    <style>
+        .button{
+         background-color:#098CDB;
+         color:white;
+         font-family;verdana; }     
+        .pbody span b{width:40%; float:left; margin-right:2%;} 
+        .btn_cls{text-align:center; padding-bottom:50px; border-bottom:3px solid #000;} 
+        .btn_cls input{border-radius: 6px !important;    box-shadow: none;    width: 24%; padding-top:3px; padding-bottom:3px;margin-right: 4px; border: 1px solid #09496f; }  
+        .btn_cls input:last:child{margin-right: 0px;} 
+        .description_table{width:100%;}
+        .description_table thead th, .description_table tbody td{padding:5px;}
+        .description_table thead th:first-child, .description_table tbody td:first-child{width:25%;}
+        .description_table thead th:second-child, .description_table tbody td:second-child{width:25%;}
+        .description_table thead th:third-child, .description_table tbody td:third-child{width:40%;}
+        .description_table thead th:last-child,  .description_table tbody td:last-child{width:20%;}
+    </style>
+    
+    <apex:form ><br/><br/>
+    
+        <div style="width:50%;margin:0 auto;border:3px solid #436D85; background-color:lightgrey;">
+        
+            <apex:pageBlock title="Create Scenario" id="ClearFields"><br/>        
+                   
+                    <b> Scenario Short Description: </b>&nbsp;<apex:image value="{!$Resource.Required}"/> &nbsp;&nbsp;<apex:inputField value="{!NewSM.Scenario_Short_Description__c}" style="background-color:lightgrey; width:25%;"/><span style="padding:30px;"/>
+                    <b> Status: </b>&nbsp;<apex:image value="{!$Resource.Required}"/> &nbsp;&nbsp;<apex:inputField value="{!NewSM.Scenario_Status__c}"  style="background-color:lightgrey; width:20%"/><br/><br/>
+                    <b> Scenario Long Description: </b>&nbsp;<apex:image value="{!$Resource.Required}"/> &nbsp;&nbsp;<apex:inputField value="{!NewSM.Scenario_Long_Description__c}" style="background-color:lightgrey;width:25%; padding:3px 2px;"/><span style="padding:20px;"/>
+                    <b>Template : </b>&nbsp;<apex:image value="{!$Resource.Required}"/> &nbsp;&nbsp;<apex:inputField value="{!NewSM.Template_Id__c}"  style="background-color:lightgrey; width:20%"/><br/><br/>
+                    
+                <div class="btn_cls"> 
+                    <apex:commandButton value="Save & New" action="{!SaveandNewSM}" reRender="ClearFields" styleClass="button"/>
+                    <apex:commandButton value="Save & Close" style="background-color:#098CDB;color:white;font-family;verdana;"/>
+                    <apex:commandButton value="Cancel" onclick="this.form.reset();return false;" styleClass="button"/><br/>
+                </div>
+                
+                    <table class="description_table">
+                        <thead>
+                            <tr>
+                                <th><b> Scenario short description </b></th>
+                                <th><b> Scenario Long description </b></th>
+                                <th><b> Template </b></th>
+                                <th><b> Status </b></th>
+                            </tr>     
+                        </thead>
+                        <tbody>
+                        
+                            <apex:repeat value="{!SMList}" var="SM">
+                                <tr>
+                                    <td>
+                                        <apex:outputText value="{!SM.Scenario_Short_Description__c}"/>
+                                    </td>
+                                    <td>
+                                        <apex:outputText value="{!SM.Scenario_Long_Description__c}" />
+                                    </td>
+                                    <td>
+                                         <apex:outputText value="{!SM.Template_Id__r.Name}" />
+                                    </td>
+                                    <td>
+                                        <apex:outputText value="{!SM.Scenario_Status__c}" />
+                                    </td>
+                                </tr>
+                            </apex:repeat>
+                            
+                        </tbody>
+                    </table> 
+            </apex:pageBlock>
+        </div>
+    </apex:form>
+    
+</apex:page>

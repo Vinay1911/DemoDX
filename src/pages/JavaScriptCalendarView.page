@@ -1,0 +1,444 @@
+<apex:page controller="JavaScriptCalendarviewController" showHeader="false" sidebar="false" docType="html-5.0" standardStylesheets="false" action="{!pageLoad}" >
+    <!--<link href="{!$Resource.harishfullCalendarCSS}" rel="stylesheet" /> 
+  
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    
+ <link href="{!$Resource.jsgrid_min_css}" rel="stylesheet"  />
+ <link href="{!$Resource.jsgrid_theme_min}" rel="stylesheet" />
+ <script src="{!$Resource.jsgrid_min_js}"></script> -->
+ 
+    
+    
+  <!--   <script src="{!$Resource.CDMoment}"></script>
+      
+    
+   <script src="{!$Resource.harishfullCalendarMinJS}"></script> -->
+    <apex:messages />
+
+    <head>
+        <title>Calendar View</title>
+    </head>
+    <script>
+        
+        //We need to wrap everything in a doc.ready function so that the code fires after the DOM is loaded
+       
+        $(document).ready(function() {
+          
+
+       $( "#accordion" ).accordion();
+       
+$('#dialog').dialog({autoOpen:false});
+          
+        
+         $('#my-today-button').click(function() {
+            
+                $('#calendar').fullCalendar('today');
+                
+            });
+            
+          
+           
+            function formatDate(date) {
+           // var myEDTString = moment(date).tz('America/New_York').format();
+        var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+        //Call the fullCallendar method. You can replace the '#calendar' with the ID of the dom element where you want the calendar to go. 
+              var accounts= new Array();
+
+     <apex:repeat value="{!ftWrapList  }" var="e">
+    
+ var jsAccounts= new Array();
+       jsAccounts.push("{!e.name}");
+       jsAccounts.push("{!e.startString}");
+       jsAccounts.push("{!e.failcount}");
+       jsAccounts.push("{!e.sucCount}");
+       
+accounts.push(jsAccounts);
+     </apex:repeat>
+//console.log(accounts);
+
+  
+               function getEvents(date){  var logfileNames =[];
+        accounts.forEach(function(entry) {
+       // console.log("passed"+date);console.log(entry[1]);
+       // console.log("listdate"+formatDate(entry[1]));
+       
+       // console.log(entry[0]); console.log("sdfasdf")
+              
+            
+            if ( formatDate(entry[1]) == date){
+               logfileNames.push(entry)
+               }
+            
+         });
+    return logfileNames;
+    }
+    
+   
+              
+            $('#calendar').fullCalendar({
+            
+            
+
+                header: {
+                    left: '',
+                    right: 'prev,next'
+                },
+                editable: false,
+                eventOrder: 'color,start',
+             //   defaultDate: '2016-06-06',
+                defaultView: 'basicWeek',
+
+                views: {
+                    today: {
+                        buttonText: 'Today'
+                    }
+
+                },
+                
+                
+  
+
+                eventRender: function(event, element, view) {
+                    // event.start is already a moment.js object
+                    // we can apply .format()
+                    var dateString = event.start.format("YYYY-MM-DD");
+
+
+                   // $('.fc-day[data-date="2016-06-06"]').css("background-color", "#FFFFFF !important");
+                   // $('.fc-day-header[data-date="2016-06-06"]').css("background-color", "#FFFFFF !important");
+                   // $('.fc-day-header[data-date="2016-06-06"]').css("font-weight", "bold !important");
+                   // $('.fc-content-skeleton > table').css("background", "none");
+                },
+                
+ 
+           eventClick: function(event, calEvent, jsEvent, view ){
+           //http://stackoverflow.com/questions/26151121/fullcalendar-js-get-events-of-the-day-on-click
+       obj =  getEvents(event.start.format("YYYY-MM-DD"));  
+       console.log(obj);
+         var dateStr =   moment(event.start).format('DD/MM/YYYY hh:mm')
+                var myDate = new Date(event.start);
+                var a = new Date(myDate);
+                var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+                var dayOfWeek = days[a.getDay()]
+                var mL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                var monthName = mL[a.getMonth()]
+                var n = a.getDate();
+                var y = a.getFullYear();
+                var modal = $("#modal");
+                var strOut = dayOfWeek + ' ' + monthName + ' ' + n + ',' +' '+ y                 
+               
+                 var tablecontents = ''; 
+                  var tableHeader = [ { name: "Destination", type: "text", width: 150 },
+            { name: "File Name", type: "text", width: 50 },
+            { name: "File Type", type: "text", width: 200 },
+            { name: "Scheduled", type: "text",  },
+            { name: "Sent Date/Time", type: "text" },
+            { name: "Staus" },
+            { name: "Rating"}];              
+                 for (var i=0; i<obj.length; i++) {
+                 var childprop = '';
+                     for(j=0;j<obj[i].length; j++ ) {
+                         var color = '';
+                         var tableData;
+                         if(obj[i][2] > obj[i][3] )
+                         {
+                             color = "color:red;";
+                         }
+                         childprop = '<h3 id="head'+i+'"><a style="'+ color +'" href="#">'+ obj[i][0] +
+                         '<span style="float:right">'+ obj[i][3] +'/'+ obj[i][2] +'</span></a></h3><div><div id="jsGrid'+i+'"></div></div>';   
+                            
+                     }  
+                      tablecontents += childprop  
+                     
+                    
+                       
+             }      
+ 
+             $("#accordion").accordion("destroy");
+             $("#accordion").html(tablecontents).accordion({collapsible: true, heightStyle: "content" });
+           
+             $( "#accordion" ).accordion( "refresh" ); 
+             
+              for (var x=0; x<obj.length; x++) {
+                 var tableData =[];
+                     for(y=0;y<obj[x].length; y++ ) {                        
+                          tableData .push(
+                            { "Destination":obj[x][0], "File Name": obj[x][0], "File Type": obj[x][0], "Scheduled": "Ap #897-1459 Quam Avenue", "Sent Date/Time": "sdf", "Status": "sdf", "Rating": "rr" })
+                     }  
+                      $("#jsGrid"+x).jsGrid({
+                                    autoload: true, 
+                                    width: "100%",
+                                    height: "auto",
+                                    sorting: true,                                   
+                                    data: tableData, 
+                                    fields: tableHeader
+                                })  
+                     
+                    
+                       
+             }  
+             
+             
+             
+            
+ 
+                 $( "#dialog" ).dialog({ title: strOut, width: 800});            
+                   
+                $('#dialog').dialog('open');
+
+                   
+                   
+                    
+   
+        },    
+                eventOrder : "start",
+               
+                dayRender: function(date, cell) {},
+                events:
+
+                    [
+                    
+
+                    //At run time, this APEX Repeat will reneder the array elements for the events array
+
+                    <apex:repeat value="{!ftWrapList}" var="e" >
+
+                    {
+
+                        title: "{!e.title}",
+                        start: '{!e.startString}',
+                        url:   "",
+                        allDay: {!e.allDay},
+                        className: '{!e.className}',
+                        color: '{!e.color}',
+                        description: '{!e.description}',
+                        textColor: '{!e.textColor}',
+                        backgroundColor: '{!e.backgroundColor}',
+                        id: '{!e.id}',
+                        borderColor: '{!e.borderColor}'
+                    },
+
+                    </apex:repeat>
+                ]
+                
+                
+            });
+            
+        });
+        
+      
+    </script>
+    
+    <!-------New script for the datapop ---->
+  
+ 
+    <!-------end script for the datapop ---->
+  
+    <!--some styling. Modify this to fit your needs-->
+    <style>
+        #cal-options {
+            float: left;
+        }
+        
+        #cal-legend {
+            float: right;
+        }
+        
+        #cal-legend ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        #cal-legend ul li {
+            margin: 0;
+            padding: 5px;
+            float: left;
+        }
+        
+        #cal-legend ul li span {
+            display: block;
+            height: 20px;
+            width: 16px;
+            margin-right: 4px;
+            float: left;
+            border-radius: 4px;
+        }
+        
+        #calendar {
+            margin-top: 20px;
+        }
+        
+        #calendar a:hover {}
+        
+        .fc-left h2 {
+            font-size: large;
+        }
+        
+        .fc-title {
+            font-size: medium;
+        }
+        
+        .fc-event-inner {
+            padding: 3px;
+        }
+        
+        .fc-day-header{
+        
+           
+        } 
+        
+        .event-birthday {
+
+            opacity: .8 !important;
+            text-align: justify !important;
+            -moz-text-align-last: justify !important;
+            text-align-last: justify !important;
+        }
+        
+        .event-campaign {
+            background: #cc9933;
+            border-color: #cc9933;
+        }
+        
+        .event-personal {
+            background: #1797c0;
+            border-color: #1797c0;
+            !important
+        }
+        
+        .fc-unthemed.fc-today {
+            background-color: #A8B2B2;
+            opacity: .6;
+        }
+        
+        .filesprocess {
+            text-align: right;
+        }
+        
+        table.table-bordered.table-striped tr.extradanger td {
+            background-color: #ff4d4d;
+            color: white;
+        }
+        
+        table.table-bordered.table-striped tr.headC td {
+            text-align: center;
+            font-weight: 800;
+        }
+        
+        .extradanger {
+            background-color: #CB3524;
+        }
+        
+        .bs-callout-default {
+            border-left-color: #0D80CF;
+            border: 1px solid #0D80CF;
+        }
+        
+        .bs-callout-logo {
+            border-left-color: #53BAD5;
+            border: 1px solid #53BAD5;
+        }
+        
+        .bs-callout-main {
+            border-left-color: #CFEAF9;
+            border: 1px solid #CFEAF9;
+        }
+        
+        .bs-callout {
+            padding: 20px;
+            margin: 20px 0;
+            border-left-width: 5px;
+            border-radius: 3px;
+        }
+        
+        .type {
+            display: inline-block;
+        }
+        
+        .count {
+            display: inline-block;
+            float: right;
+        }
+        
+        th {
+            font-size: 18px !important;
+        }
+        
+        .content-region {
+            display: inline-block !important;
+            width: 100% !important;
+            padding: 23px !important;
+            margin-bottom: 15px !important;
+            border: 1px solid #ccc !important;
+            background: white !important;
+            box-shadow: 0 5px 10px #ccc !important;
+            padding-bottom: 10% !important;
+        }
+        .today{
+        background-color: #F47D2B !important;
+        font-weight:bold !important;
+        
+        }
+        a{
+        margin:1%;
+        }
+        .toMatch{
+        background-color:#A8B2B2;
+        border-radius:6px;
+        height:26px;
+        padding-left:3px;
+        padding-right:3px;
+        margin-right:22px;
+        }
+        .legend{
+            font-size:medium; 
+            display:inline-block; 
+            color:white;
+            margin-top:1%;
+        
+        }
+        
+        
+        
+        
+    </style>
+
+
+    
+
+            <div class="content-region">
+
+              <div style="clear:both;"></div>
+                <div style="height:250px; overflow:hidden;" >
+                   <div id="calendar"></div>
+                    </div>
+                    <div id="dialog"><div id="accordion">
+   <h3><a href="#">Section 1</a></h3>
+    <div>
+       
+    </div>
+    <h3><a href="#">Section 2</a></h3>
+    <div>
+        <p>sec 2222</p>
+    </div>   
+</div>  </div></div>   
+           
+
+  
+
+
+   
+</apex:page>

@@ -1,0 +1,244 @@
+<apex:page controller="CalendarDisplayController" showHeader="false">
+    
+    <html>        
+        <head>
+            <style>        
+                td {
+                padding: 15px;                       
+                }
+                
+                tr{
+                border:2px solid lightgray;
+                }
+            </style>
+            <style type="text/css">
+                .custPopup{
+                background-color: white;
+                z-index: 9999;
+                left: 2%;
+                padding: 10px;
+                position: absolute;
+                width: 1251px; 
+                top: 100px;
+                height: 350px;
+                }
+                .popupBackground{
+                background-color:black;
+                opacity: 0.20;
+                filter: alpha(opacity = 20);
+                position: absolute;
+                width: 100%;
+                height:150%;
+                top: 0;
+                left: 0;
+                z-index: 9998;
+                }
+                
+            </style>
+        </head>
+        <body>
+            <apex:form > 
+                <div align="right">
+                    <apex:commandButton value="<" style="font-size:20px">
+                        <apex:actionsupport action="{!previous}" event="oncomplete" rerender="out"/>
+                    </apex:commandButton>
+                    <apex:commandButton value=">" style="font-size:20px">
+                        <apex:actionsupport action="{!next}" event="oncomplete" rerender="out"/>
+                    </apex:commandButton>
+                </div>
+                <apex:outputPanel >
+                    <div align="center">
+                        <apex:pageblock id="out"> 
+                            <apex:actionFunction name="hitMe" action="{!showPopup}" rerender="tstpopup">
+                                <apex:param name="dateval" value="" /> 
+                            </apex:actionFunction>
+                            <table style="background-color:#FFFFFF; width:100%;height:100%;border:2px solid lightgray;" >
+                                
+                                <tr style="font-size:18px;text-align:center;cursor:pointer;" >                        
+                                    
+                                    <td colspan="2" onclick="hitMe('{!wrap[0].col1}')" style=" border-right:2px solid lightgray; border-bottom:2px solid lightgray;" >
+                                        <span style="cursor: pointer;" >{!wrap[0].col1}</span>
+                                        
+                                    </td> 
+                                    <td colspan="2" onclick="hitMe('{!wrap[0].col3}')" style=" border-right:2px solid lightgray; border-bottom:2px solid lightgray;" >
+                                        <span style="cursor: pointer;" onclick="hitMe('{!wrap[0].col3}')">{!wrap[0].col3}</span>
+                                        
+                                    </td> 
+                                    <td colspan="2" onclick="hitMe('{!wrap[0].col5}')" style=" border-right:2px solid lightgray; border-bottom:4px solid lightgray;">
+                                        <span style="cursor: pointer;" >{!wrap[0].col5}</span>
+                                        
+                                    </td> 
+                                    <td colspan="2" onclick="hitMe('{!wrap[0].col7}')" style=" border-right:2px solid lightgray; border-bottom:2px solid lightgray;">
+                                        <span style="cursor: pointer;" >{!wrap[0].col7}</span>
+                                        
+                                    </td> 
+                                    <td colspan="2" onclick="hitMe('{!wrap[0].col9}')" style=" border-right:2px solid lightgray; border-bottom:2px solid lightgray;">
+                                        <span style="cursor: pointer;" >{!wrap[0].col9}</span>
+                                        
+                                    </td> 
+                                    <td colspan="2" onclick="hitMe('{!wrap[0].col11}')" style=" border-right:2px solid lightgray; border-bottom:2px solid lightgray;">
+                                        <span style="cursor: pointer;" >{!wrap[0].col11}</span>
+                                        
+                                    </td> 
+                                    <td colspan="2" onclick="hitMe('{!wrap[0].col13}')" style=" border-right:2px solid lightgray; border-bottom:2px solid lightgray;">
+                                        <span style="cursor: pointer;" >{!wrap[0].col13}</span>
+                                        
+                                    </td>  
+                                    
+                                </tr>
+                                <apex:variable var="var" value="{!0}"/>
+                                <apex:repeat value="{!wrap}" var="r">
+                                    <apex:outputtext rendered="{!var != 0}">
+                                        <tr style="font-size:16px;height:40px; " >
+                                            <td style="background-color:{!r.bg1}">
+                                                <apex:outputtext value="{!r.col1}"/>
+                                            </td>
+                                            <td  style=" border-right:2px solid lightgray;background-color:{!r.bg1}" > 
+                                                
+                                            </td >
+                                            <td style="background-color:{!r.bg2}">
+                                                <apex:outputtext value="{!r.col3}"/>
+                                            </td>
+                                            <td  style=" border-right:2px solid lightgray;background-color:{!r.bg2}" >
+                                                <apex:outputtext value="{!r.col4}"/>
+                                            </td>
+                                            <td style="background-color:{!r.bg3}">
+                                                <apex:outputtext value="{!r.col5}"/>
+                                            </td>
+                                            <td  style=" border-right:2px solid lightgray;background-color:{!r.bg3}" >
+                                                <apex:outputtext value="{!r.col6}"/>
+                                            </td>
+                                            <td style="background-color:{!r.bg4}">
+                                                <apex:outputtext value="{!r.col7}"/>
+                                            </td>
+                                            <td  style=" border-right:2px solid lightgray;background-color:{!r.bg4}">
+                                                <apex:outputtext value="{!r.col8}"/>
+                                            </td>
+                                            <td style="background-color:{!r.bg5}">
+                                                <apex:outputtext value="{!r.col9}"/>
+                                            </td>
+                                            <td style=" border-right:2px solid lightgray;background-color:{!r.bg5}">
+                                                <apex:outputtext value="{!r.col10}"/>
+                                            </td>
+                                            <td style="background-color:{!r.bg6}">
+                                                <apex:outputtext value="{!r.col11}"/>
+                                            </td>
+                                            <td style=" border-right:2px solid lightgray;background-color:{!r.bg6}">
+                                                <apex:outputtext value="{!r.col12}"/>
+                                            </td>
+                                            <td style="background-color:{!r.bg7}">
+                                                <apex:outputtext value="{!r.col13}"/>
+                                            </td>
+                                            <td  style="background-color:{!r.bg7}">
+                                                <apex:outputtext value="{!r.col14}"/>
+                                            </td>
+                                        </tr>
+                                    </apex:outputtext>
+                                    <apex:variable var="var" value="{!1}"/>
+                                </apex:repeat>
+                            </table>
+                        </apex:pageblock>
+                    </div>
+                </apex:outputPanel>
+                <apex:outputPanel id="tstpopup">
+                    <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUp}"/>
+                    <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopUp}">
+                        <br/><span style="padding:10px;"></span>
+                        <h1 style="font-size:20px;font-family:verdana;"><apex:outputtext value="{!title}"/></h1><br/><br/>
+                        <apex:pageblock id="out1"><br/>      
+                            <apex:outputLabel value="No Records Found" style="color:red;font-size:14px;" rendered="{!if(ftllist.size == 0,true,false)}"/>
+                            <apex:repeat value="{!finalftl}" var="r">
+                                <div style="width:94%; "> 
+                                    <div style="background-color:#BDC3C7;">                  
+                                        <apex:image value="{!$Resource.divPlus}" rendered="{!!showhide[r]}">
+                                            <apex:actionsupport action="{!hideorshow}" event="onclick" rerender="out1">
+                                                <apex:param name="rec" assignTo="{!rec}" value="{!r}"/>
+                                            </apex:actionsupport>
+                                        </apex:image>
+                                        <apex:image value="{!$Resource.divMinus}" rendered="{!showhide[r]}">
+                                            <apex:actionsupport action="{!hideorshow}" event="onclick" rerender="out1">
+                                                <apex:param name="rec" assignTo="{!rec}" value="{!r}"/>
+                                            </apex:actionsupport>
+                                        </apex:image>
+                                        
+                                        &nbsp;&nbsp;
+                                        
+                                        <b> <apex:outputtext value="{!r}" style="font-family:verdana;font-size:15;text-align:top;"/>  </b>
+                                    </div>               
+                                </div> <br/>                  
+                                <apex:outputtext rendered="{!showhide[r]}">
+                                    <table style="width:91%;height:100%;border-collapse:collapse; border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF; font-size:10; margin-left:3%" >
+                                        <tr style="font-size:16px;height:20px;">
+                                            <td style="border:2px solid lightgray;font-family:verdana,arial;font:bold;background-color:#FFFFFF;">                                                     
+                                                <apex:outputtext value="Destination"/>
+                                            </td>
+                                            <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">
+                                                <apex:outputtext value="File Name" />
+                                            </td>
+                                            <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">
+                                                <apex:outputtext value="File Type" />
+                                            </td>
+                                            <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">
+                                                <apex:outputtext value="Scheduled" />
+                                            </td>
+                                            <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">
+                                                <apex:outputtext value="Sent Date/Time" />
+                                            </td>
+                                            <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">
+                                                <apex:outputtext value="Status" />
+                                            </td>
+                                            <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">
+                                                <apex:outputtext value="Rating" />
+                                            </td>
+                                            <td style="border-style;none">                                
+                                            </td>
+                                        </tr>
+                                        <apex:repeat value="{!finalftl[r]}" var="eachrec" id="results">
+                                            <tr>   
+                                                <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">                         
+                                                    <apex:outputtext value="{!eachrec.destination__c}"/>
+                                                </td>
+                                                <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">                            
+                                                    <apex:outputtext value="{!eachrec.file_name__c}"/>
+                                                </td>
+                                                <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">                            
+                                                    <apex:outputtext value="{!eachrec.file_type__c}"/>
+                                                </td>
+                                                <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">                            
+                                                    
+                                                </td>
+                                                <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">                            
+                                                    <apex:outputtext value="{!eachrec.File_Sent_Time__c}"/>
+                                                </td>
+                                                <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">                            
+                                                    <apex:image value="{!IF(eachrec.File_Sent_Time__c < eachrec.client_processing_deadline__c,$Resource.Correct,$Resource.Error)}"/>
+                                                </td>  
+                                                <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;text-align:center;">                            
+                                                    
+                                                    <apex:image value="{!IF(eachrec.Rating__c != '1'  ,$Resource.BlueStar,$Resource.Yellowstar)}" />
+                                                    <apex:image value="{!IF(eachrec.Rating__c != '2' ,$Resource.BlueStar,$Resource.Yellowstar)}"/>
+                                                    <apex:image value="{!IF(eachrec.Rating__c != '3'  ,$Resource.BlueStar,$Resource.Yellowstar)}"/>
+                                                    <apex:image value="{!IF(eachrec.Rating__c != '4' ,$Resource.BlueStar,$Resource.Yellowstar)}"/>
+                                                    <apex:image value="{!IF(eachrec.Rating__c != '5'  ,$Resource.BlueStar,$Resource.Yellowstar)}"/>                                   
+                                                    
+                                                </td>
+                                                <td style="text-align:center;">        
+                                                    <input type = "button" value="confirm" style="background-color:#3498DB;font-size:16px;border-radius: 15%;height:25px;color: white; border: solid 1px #3498DB;"/>                    
+                                                    
+                                                </td>
+                                            </tr>
+                                        </apex:repeat>
+                                    </table>                         
+                                </apex:outputtext>
+                                <br/><br/>
+                            </apex:repeat>
+                        </apex:pageblock>
+                        <center>
+                            <apex:commandButton value="Close" action="{!closePopup}" rerender="tstpopup"/></center>
+                    </apex:outputPanel>
+                </apex:outputPanel>
+                
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

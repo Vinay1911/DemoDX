@@ -1,0 +1,93 @@
+<apex:page controller="calendarviewclasspopupwindow" showheader="false">    
+    <apex:form >
+    <br/><span style="padding:10px;"></span>
+        <h1 style="font-size:20px;font-family:verdana;"><apex:outputtext value="{!title}"/></h1><br/><br/>
+        <apex:pageblock id="out"><br/>         
+                <apex:repeat value="{!finalftl}" var="r">
+                    <div style="width:94%; "> 
+                       <div style="background-color:#BDC3C7;">                  
+                        <apex:image value="{!$Resource.divPlus}" rendered="{!!showhide[r]}">
+                            <apex:actionsupport action="{!hideorshow}" event="onclick" rerender="out">
+                                <apex:param name="rec" assignTo="{!rec}" value="{!r}"/>
+                            </apex:actionsupport>
+                        </apex:image>
+                        <apex:image value="{!$Resource.divMinus}" rendered="{!showhide[r]}">
+                            <apex:actionsupport action="{!hideorshow}" event="onclick" rerender="out">
+                                <apex:param name="rec" assignTo="{!rec}" value="{!r}"/>
+                            </apex:actionsupport>
+                        </apex:image>
+                       
+                        &nbsp;&nbsp;
+                      
+                       <b> <apex:outputtext value="{!r}" style="font-family:verdana;font-size:15;text-align:top;"/>  </b>
+                      </div>               
+                </div> <br/>                  
+                <apex:outputtext rendered="{!showhide[r]}">
+                   <table style="width:91%;height:100%;border-collapse:collapse; border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF; font-size:10; margin-left:3%" >
+                        <tr style="font-size:16px;height:20px;">
+                            <td style="border:2px solid lightgray;font-family:verdana,arial;font:bold;background-color:#FFFFFF;">                                                     
+                               <apex:outputtext value="Destination"/>
+                            </td>
+                            <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">
+                                <apex:outputtext value="File Name" />
+                            </td>
+                            <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">
+                                <apex:outputtext value="File Type" />
+                            </td>
+                            <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">
+                                <apex:outputtext value="Scheduled" />
+                            </td>
+                            <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">
+                                <apex:outputtext value="Sent Date/Time" />
+                            </td>
+                            <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">
+                                <apex:outputtext value="Status" />
+                            </td>
+                            <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">
+                                <apex:outputtext value="Rating" />
+                            </td>
+                            <td style="border-style;none">                                
+                            </td>
+                        </tr>
+                        <apex:repeat value="{!finalftl[r]}" var="eachrec" id="results">
+                            <tr>   
+                                <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">                         
+                                    <apex:outputtext value="{!eachrec.destination__c}"/>
+                                </td>
+                                <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">                            
+                                    <apex:outputtext value="{!eachrec.file_name__c}"/>
+                                </td>
+                                <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">                            
+                                    <apex:outputtext value="{!eachrec.file_type__c}"/>
+                                </td>
+                                <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">                            
+                                    
+                                </td>
+                                <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">                            
+                                    <apex:outputtext value="{!eachrec.File_Sent_Time__c}"/>
+                                </td>
+                                <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;">                            
+                                    <apex:image value="{!IF(eachrec.File_Sent_Time__c < eachrec.client_processing_deadline__c,$Resource.Correct,$Resource.Error)}"/>
+                                </td>  
+                                <td style="border:2px solid lightgray;font-family:verdana,arial;background-color:#FFFFFF;text-align:center;">                            
+                                  
+                                   <apex:image value="{!IF(eachrec.Rating__c != '1'  ,$Resource.BlueStar,$Resource.Yellowstar)}"/>
+                                   <apex:image value="{!IF(eachrec.Rating__c != '2' ,$Resource.BlueStar,$Resource.Yellowstar)}"/>
+                                   <apex:image value="{!IF(eachrec.Rating__c != '3'  ,$Resource.BlueStar,$Resource.Yellowstar)}"/>
+                                   <apex:image value="{!IF(eachrec.Rating__c != '4' ,$Resource.BlueStar,$Resource.Yellowstar)}"/>
+                                   <apex:image value="{!IF(eachrec.Rating__c != '5'  ,$Resource.BlueStar,$Resource.Yellowstar)}"/>                                   
+                                   
+                                </td>
+                                <td style="text-align:center;">        
+                                    <input type = "button" value="confirm" style="background-color:#3498DB;font-size:16px;border-radius: 15%;height:25px;color: white; border: solid 1px #3498DB;"/>                    
+                                    
+                                </td>
+                            </tr>
+                        </apex:repeat>
+                    </table>                         
+                </apex:outputtext>
+                <br/><br/>
+            </apex:repeat>
+        </apex:pageblock>
+    </apex:form>
+</apex:page>

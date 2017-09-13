@@ -1,0 +1,11 @@
+<apex:page controller="contactController1">
+    <apex:form >
+        <apex:pageBlock title="Look-up Data">
+            <apex:pageBlockSection title="My Look-Up Content" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:inputField value="{!contact.AccountId}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,242 @@
+<apex:page controller="ConfigurationTestingController" showHeader="false">
+    
+    
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" /> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    
+    <apex:form >
+        
+        <apex:pageBlock >
+            
+            <div  style="text-align:center">
+                
+                <apex:pageBlockButtons Location="Top">
+                    
+                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#OpenNewTestCycle" style="color:Black;">New Test Cycle</button>
+                    <button type="button" class="btn btn-info btn-lg"  style="color:Black;" data-toggle="modal" data-target="#OpenNewTestRoundLatestPSR">New Test Round</button>                                        
+                    <apex:commandButton value="Delete All Scenarios for Current Cycle" action="{!deleteLatestcycle}" reRender="RefreshafterDelete" onclick="ConfirmforDelete()"/>                                 
+                    
+                    <apex:commandButton value="Update"  action="{!UpdateDate}"/>
+                    
+                </apex:pageBlockButtons>
+                
+            </div>
+            
+            <div><br/>
+                
+                <apex:pageBlockTable value="{!ProjectSCResult}" var="PSR" id="RefreshafterDelete">
+                    
+                    <apex:column headerClass="">                        
+                        <apex:image Value="{!$Resource.divPlus}"/>                        
+                    </apex:column>
+                    
+                    <apex:column headerValue="Scenario Short Description">                        
+                        <apex:outputField value="{!PSR.Scenario_Short_Description__c}"/>                        
+                    </apex:column>
+                    
+                    <apex:column headerValue="Internal User">                        
+                        <apex:outputField value="{!PSR.Internal_User__c}"/>                        
+                    </apex:column>
+                    
+                    <apex:column headerValue="Status">                        
+                        <apex:outputField value="{!PSR.Internal_Status__c}"/>
+                                                  
+                    </apex:column>
+                    
+                    <apex:column headerValue="Status Date" >                        
+                        <apex:outputField value="{!PSR.Internal_Status_Date__c}">
+                            <apex:inlineEditSupport event="onclick"/>
+                        </apex:outputField>
+                        
+                    </apex:column>
+                    
+                    <apex:column headerValue="External User">                        
+                        <apex:outputField value="{!PSR.External_User__c}"/>                        
+                    </apex:column>
+                    
+                    <apex:column headerValue="Status">                        
+                        <apex:outputField value="{!PSR.External_Status__c}"/>&nbsp;&nbsp;
+                                                  
+                    </apex:column>
+                    
+                    <apex:column headerValue="Status Date">                        
+                        <apex:outputField value="{!PSR.External_Status_Date__c}">
+                            <apex:inlineEditSupport event="onclick"/>                             
+                        </apex:outputField>
+                        
+                    </apex:column>
+                    
+                </apex:pageBlockTable>
+                
+            </div>
+            
+        </apex:pageBlock>
+        
+    </apex:form>
+    
+    
+    <!-- Modal for New Test Cycle Button -->
+    <div  id="OpenNewTestCycle" role="dialog" class="modal fade">
+        <div class="modal-dialog" style="width:1300px;position:relative;overflow-y:auto;">
+            
+            <!-- Modal content-->
+            <div class="modal-content">
+                
+                <div class="modal-body" style="height:350px;position:relative;overflow-y:auto;">
+                    
+                  <apex:form >
+                    <apex:pageBlock >
+                    
+                        <h4>Template Selection</h4><span style="padding:180px"></span><h4>Individual Scenario Selection</h4><br/><br/>
+                        
+                       <apex:pageBlockSection columns="2">
+                       
+                        <apex:pageBlockTable value="{!TemplateMaster}" var="CTM" style="background-color:#CFD7E6;" rendered="{!IF(TemplateMaster !=0,True,False)}">  
+                                                  
+                            <apex:column headerValue="Select" >                                
+                                <input type="checkbox" />                                
+                            </apex:column>
+                            
+                            <apex:column headerValue="Description" >                                
+                                <apex:outputField value="{!CTM.Name}"/>                                
+                            </apex:column>
+                            
+                            <apex:column headerValue="Status" >                                
+                                <apex:outputField value="{!CTM.Template_Status__c}"/>                                
+                            </apex:column>           
+                                                        
+                        </apex:pageBlockTable>
+                        
+                            <apex:pageBlockTable value="{!ScMaster}" var="SM" style="background-color:#CFD7E6;">
+                            
+                                <apex:column headerValue="Select">
+                                     <input type="checkbox"  /> 
+                                </apex:column>
+                                
+                                <apex:column headerValue="Test Scenario Short Description">
+                                     <apex:outputField value="{!SM.Scenario_Short_Description__c}"/> 
+                                </apex:column>
+                                
+                                <apex:column headerValue="Test Scenario Short Description">
+                                     <apex:outputField value="{!SM.Scenario_Long_Description__c}"/> 
+                                </apex:column>
+                                
+                                <apex:column headerValue="Test Scenario Short Description">
+                                     <apex:outputField value="{!SM.Scenario_Status__c}"/> 
+                                </apex:column>
+                                
+                                
+                                
+                            </apex:pageBlockTable>
+                                                             
+                               
+                          </apex:pageBlockSection><br/>
+                          
+                        <!--  <input type="button" value="Create scenario records from template" style="color:white;background-color:#005FB2;width:38%;border:1px solid #005FB2;border-radius: 25px; " data-toggle="modal" data-target="#NewCTMRecordCreation"/>--><span style="padding:240px"></span>                          
+                          <input type="button" value="Create scenario records from individual scenarios" style="color:white;background-color:#005FB2;width:60%;border:1px solid #005FB2;border-radius: 25px; " data-toggle="modal" data-target="#NewSMRecordCreation"/>
+                          
+                    </apex:pageBlock> 
+                    
+                 </apex:form>
+                   
+                </div>
+                
+                
+                <div class="modal-footer">
+                
+                    <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <!-- modal end-->
+    
+    <!-- Modal for New Test Round Button from latest PSR  -->
+    
+    <div  id="OpenNewTestRoundLatestPSR" role="dialog" class="modal fade">
+        <div class="modal-dialog">
+            
+            -- Modal content--
+            <div class="modal-content">
+                
+                <div class="modal-body" style="position:relative;overflow-y:auto;">
+                    
+                  <apex:form >
+                    <apex:pageBlock title="Create New PSR Record from Latest">
+                        
+                            <label> Scenario Short Description </label>      <span style="padding:2px"></span>     <apex:outputField value="{!SaveNewPSRRecord.Scenario_Short_Description__c}"/><br/><br/>
+                            <label> Internal User </label>                   <span style="padding:2px"></span>     <apex:outputField value="{!SaveNewPSRRecord.Internal_User__c}"/><br/>
+                            <label> Internal Status: </label>                 <span style="padding:2px"></span>     <apex:inputField value="{!SaveNewPSRRecord.Internal_Status__c}"/><br/><br/>
+                            <label> Internal Status date:</label>             <span style="padding:2px"></span>     <apex:inputField value="{!SaveNewPSRRecord.Internal_Status_Date__c}"/><br/><br/>
+                            <label> External User </label>                   <span style="padding:2px"></span>     <apex:outputField value="{!SaveNewPSRRecord.External_User__c}"/><br/>
+                            <label> External Status:</label>                  <span style="padding:2px"></span>     <apex:inputField value="{!SaveNewPSRRecord.External_Status__c}"/><br/><br/>
+                            <label> External Status Date: </label>            <span style="padding:2px"></span>     <apex:inputField value="{!SaveNewPSRRecord.External_Status_Date__c}"/>
+                      
+                    </apex:pageBlock> 
+                    
+                    <apex:commandButton value="Save" action="{!SaveNewPSR}"/>
+                    
+                    
+                 </apex:form>
+                   
+                </div>
+                
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>   
+    
+    <!-- Modal for Create individaul Scenario -->
+    
+        <div  id="NewSMRecordCreation" role="dialog" class="modal fade">
+                <div class="modal-dialog">
+                                    
+                      <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                            <h4>Create New Scenario Master Record </h4>
+                                        </div>
+               
+                <div class="modal-body" style="position:relative;overflow-y:auto;">
+                    
+                  <apex:form >
+                    <apex:pageBlock >
+                    
+                        Scenario Name: <apex:inputField value="{!NewSM.Name}"/><br/><br/>
+                        Scenario Short Description: <apex:inputField value="{!NewSM .Scenario_Short_Description__c}"/><br/><br/>
+                        Scenario Long Description: <apex:inputField value="{!NewSM .Scenario_Long_Description__c}"/><br/><br/>
+                        Scenario Status: <apex:inputField value="{!NewSM .Scenario_Status__c}"/><br/><br/>
+                        Date stamp: <apex:inputField value="{!NewSM .Date_stamp__c}"/>
+                       
+                    </apex:pageBlock> 
+                     <apex:commandButton value="Save" action="{!SaveNewSM}"/>                    
+                   <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                 </apex:form>
+                   
+                </div>
+                
+                
+                <div class="modal-footer">
+                    
+                   
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <script>
+        function ConfirmforDelete()
+        {
+            alert('("Are you sure?").If confirmed, delete records for the latest version/cycle of testing from the PSR.'{!deleteLatestcycle});
+        }
+    </script>
+</apex:page>

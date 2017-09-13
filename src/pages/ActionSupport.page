@@ -1,0 +1,49 @@
+<apex:page controller="TestController">
+    <apex:form >
+      <apex:pageBlock >
+       <apex:outputPanel >
+          <apex:pageblocktable value="{!acclist}" var="a">
+          
+              <apex:column headerClass="Select">
+                  <apex:inputcheckbox >
+                      <apex:actionSupport event="onclick" action="{!raditest}" reRender="acctest">
+                      
+                          <apex:param name="accid" value="{!a.id}" assignTo="{!paramval}"/>
+                       </apex:actionSupport>
+                  </apex:inputcheckbox>
+               </apex:column>
+               <apex:column headerClass="Name">
+                   {!a.name}
+               </apex:column>
+            
+           </apex:pageblocktable>
+             </apex:outputPanel>  
+             
+              <apex:outputPanel id="acctest" >
+                  <apex:pageBlockTable value="{!conlist}" var="con" rendered="{!if(conlist!=null,true,false)}" id="Updaterefresh">
+                  <apex:column headervalue="">
+                      <apex:commandlink value="Remove">
+	                      <apex:actionSupport event="onclick" action="{!RemoveContact}" >
+	                          <apex:param name="" value="{!con.id}" assignTo="{!conid}"/>
+	                       </apex:actionSupport>
+                      </apex:commandlink>
+                  </apex:column>
+                      <apex:column headerValue="lastname">
+                          <apex:inputfield value="{!con.lastname}"/>
+                      </apex:column>
+                      <apex:column headerValue="phone">
+                          <apex:inputfield value="{!con.phone}"/>
+                      </apex:column>
+                      
+                  </apex:pageBlockTable>
+                  <apex:outputpanel rendered="{!if(conlist!=null,true,false)}">
+	                 <apex:commandButton value="save" action="{!NewConRecord}"/>
+	                 <apex:commandButton value="update" action="{!save}" rerender="Updaterefresh"/>
+	                 <apex:commandButton value="Add New Row" action="{!AddNewConRow}"/>
+                   </apex:outputpanel>
+              </apex:outputPanel>  
+                     
+        
+      </apex:pageBlock>
+  </apex:form>
+</apex:page>

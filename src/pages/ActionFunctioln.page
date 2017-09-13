@@ -1,0 +1,28 @@
+<apex:page controller="ActionFunction">
+
+        <apex:form >
+        <apex:actionFunction name="clickaction" rerender="showdata" action="{!showconrecords}">
+            <apex:param name="conid" value="" assignTo="{!conid}" />
+        </apex:actionFunction>
+            <apex:pageBlock >
+                <apex:pageBlockTable value="{!Accrecords}" var="acc">
+                    <apex:column headerValue="Action">
+                        <input type="radio" onclick="clickaction('{!acc.id}','{!acc.Name}')"/>
+                         
+                    </apex:column>
+                    <apex:column headerValue="Name">
+                        <apex:outputField value="{!acc.Name}"/>
+                    </apex:column>
+                </apex:pageBlockTable>
+                
+                  <apex:outputpanel id="showdata" >
+                    <apex:repeat value="{!conrecords}" var="con">
+                        <apex:outputfield value="{!con.lastname}"/>
+                    </apex:repeat>
+                </apex:outputpanel>
+             
+            </apex:pageBlock>
+             
+            
+    </apex:form>
+</apex:page>

@@ -1,0 +1,13 @@
+<apex:page standardcontroller="Lead">
+	<apex:form >
+	<apex:pageMessages />
+		<apex:pageblock >
+			Name: <apex:inputfield value="{!Lead.lastName}"/>
+			Company: <apex:inputfield value="{!Lead.Company}"/><br/>
+			Lead Status: <apex:inputfield value="{!Lead.status}"/><br/>
+			Lead Phone:<apex:inputfield value="{!Lead.phone}"/><br/>
+			Lead Email:<apex:inputfield value="{!Lead.Email}"/><br/>
+			<apex:commandbutton value="Submit" action="{!Save}"/>
+		</apex:pageblock>
+	</apex:form>
+</apex:page>

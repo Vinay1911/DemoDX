@@ -1,0 +1,42 @@
+<apex:page controller="RequiredTest">
+    <apex:pagemessages />
+    <apex:form id="myForm">
+        <apex:pageblock id="pb1">
+            <apex:pageblockSection id="pbs1">
+                    <apex:inputText id="Name" label="Enter Name" required="true"/><br/>
+                    <apex:pageblockSectionItem >
+                    <apex:outputLabel value="Status:"/>
+                    <apex:outputPanel >
+                            <div class="requiredInput">
+                            <div class="requiredBlock"></div>
+                            <apex:selectList size="1" value="{!Status}" id="stat1">
+                                 <apex:selectOptions value="{!options}"/>
+                            </apex:selectList>
+                            </div>
+                     </apex:outputPanel>
+                </apex:pageblockSectionItem>
+
+            </apex:pageblockSection>
+            
+               
+                 <apex:commandButton value="Save & New" action="{!inserrtCTM}" reRender="pg2,showmsg" oncomplete="this.form.reset();return false;" />
+        </apex:pageblock>
+    </apex:form>
+    
+    <script>
+    function getCheckBoxValue()
+    {
+        if(document.getElementById('{!$Component.myForm.pb1.pbs1.Name}','{!$Component.myForm.pb1.pbs1.Status}').value == ''){ 
+        }
+
+    }
+    </script>
+    
+            <apex:pageBlock >
+                <apex:pageBlockTable value="{!ConfigurationTemplate}" var="acc">
+                    <apex:column value="{!acc.Name}"/>
+                    <apex:column value="{!acc.Template_Status__c}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+    
+</apex:page>
